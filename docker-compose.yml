@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api-gateway:
+    build:
+      context: ./ms-api-gateway/.
+      dockerfile: ../docker-files/spring-boot.dockerfile
+    image: api-gateway:latest
+    ports:
+      - 5001:8080
+    environment:
+     - ZUUL_ROUTES_HELLO_URL=http://ms-hello:5002
+    links:
+      - ms-hello:ms-hello
+  ms-hello:
+    build:
+      context: ./ms-hello/.
+      dockerfile: ../docker-files/spring-boot.dockerfile
+    image: ms-hello:latest
+    ports:
+      - 5002:5002
+  web-angular:
+    build:
+      context: ./web-angular/.
+      dockerfile: ../docker-files/angular.dockerfile
+    image: web-angular:latest
+    ports:
+      - 80:80
+    depends_on:
+      - "api-gateway"
