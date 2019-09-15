@@ -12,7 +12,13 @@ export class RequestService {
   constructor(private http: HttpClient) { 
   }
 
-  invoke(payload: RequestDto){
+  post(payload: RequestDto){
       return this.http.post<ResponseDto>(environment.backendUrl, payload);
   }
+
+  list(){
+    return this.http.get<ResponseDto[]>(environment.backendUrl);
+  }
+
+
 }

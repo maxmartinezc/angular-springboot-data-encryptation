@@ -6,7 +6,6 @@
   <button (click)="send(name.value)">Enviar</button>
 </div>
 <h2>Respuesta</h2>
-<div *ngIf="response">
-  <p>{{ response.name }}</p>
-  <p>{{ response.msg }}</p>
-</div>
+<p *ngFor="let item of list">
+  {{ item.msg }}
+</p>

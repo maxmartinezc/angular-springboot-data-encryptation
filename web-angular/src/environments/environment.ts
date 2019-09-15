@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   backendUrl: 'http://localhost:8080/cl/demo/hello/v1/',
-  aesSecretKey: 'u/Gu5posvwDsXUnV5Zaq4g=='
+  aesSecretKey: 'u/Gu5posvwDsXUnV5Zaq4g==',
+  aesEncryptionIv: '5D9r9ZVzEYYgha93/aUK2w=='
 };
 
 /*

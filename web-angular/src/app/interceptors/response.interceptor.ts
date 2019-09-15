@@ -9,18 +9,6 @@ export class ResponseInterceptor implements HttpInterceptor {
 
     constructor(private aesCryptoService: AesCryptoService){}
 
-    // intercept(
-    //     req: HttpRequest<any>, 
-    //     next: HttpHandler
-    //   ) {
-    //     return next.handle(req)
-    //       .pipe(
-    //         map((event: HttpResponse<any>) => {
-    //             console.log(event);
-    //             return event.clone({ body: this.aesCryptoService.decrypt(event.body) });
-    //         }));
-    //   }
-    
     intercept(
         request: HttpRequest<any>,
         next: HttpHandler
@@ -30,10 +18,8 @@ export class ResponseInterceptor implements HttpInterceptor {
         .pipe(
             map(event => {
               if (event instanceof HttpResponse) {
-                 
-                // http response status code
-                console.log(event.body.data)
-                return event.clone({ body: JSON.parse(this.aesCryptoService.decrypt(event.body.data)) });
+                if(event.body != null)
+                  return event.clone({ body: JSON.parse(this.aesCryptoService.decrypt(event.body)) });
               }
               return event;
             }, error => {
@@ -48,17 +34,4 @@ export class ResponseInterceptor implements HttpInterceptor {
           )
     
       }
-
-    // intercept(req: HttpRequest<any>, next: HttpHandler) {
-    //     return next.handle(req).pipe(
-    //         tap(event => {
-    //             if (event instanceof HttpResponse) {
-    //                 console.log("AAAAAaAa");
-    //                 //console.log(this.aesCryptoService.decrypt(event.body));
-    //                 return event.clone({ body: this.aesCryptoService.decrypt(event.body) });
-    //             }
-    //          }
-    //       )
-    //     );
-    //   }
-}
+    }

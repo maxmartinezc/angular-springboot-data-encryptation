@@ -10,13 +10,16 @@ import { ResponseDto } from '../dto/response-dto';
 })
 export class HelloComponent {
 
-  response: ResponseDto;
+  list: Array<ResponseDto>;
   constructor(private requestService: RequestService) { }
 
   send(txtName: string){
-    this.requestService.invoke({ name: txtName}).subscribe(data => {
-          this.response = data;
+    this.requestService.post({ name: txtName}).subscribe(data => {
+        this.getList();
     });
   }
 
+  getList(){
+    this.requestService.list().subscribe(data => this.list = data)
+  }
 }

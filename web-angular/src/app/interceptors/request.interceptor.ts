@@ -1,9 +1,9 @@
-import { HttpHandler, HttpInterceptor, HttpRequest, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, ɵConsole } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { AesCryptoService } from '../services/aes-crypto.service';
-import { WrapperRequestResponseDto } from '../dto/wrapper-request-response.dto';
-import { map, catchError } from 'rxjs/operators';
+
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
@@ -12,11 +12,18 @@ export class RequestInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
-        let body: WrapperRequestResponseDto = { data: this.aesCryptoService.encrypt(request.body) };
-        request = request.clone({body: body});
-
-    return next.handle(request);
-
+        return this.aesCryptoService.encrypt(request.body).pipe(
+            map(encrypted => typeof request.body === 'string' ? encrypted : new JsonReplacer(encrypted)),
+            map(body => request.clone({ body })),
+            switchMap(req => next.handle(req))
+        );
     }
-  
+}
+
+class JsonReplacer{
+    constructor(private content: string){}
+
+    toJSON(): string {
+        return this.content;
+    }
 }
