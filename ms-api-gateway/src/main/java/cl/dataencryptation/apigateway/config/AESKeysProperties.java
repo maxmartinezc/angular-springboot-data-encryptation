@@ -6,6 +6,11 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component para parsear desde el archivo properties los canales (channels) autorizados y su configuración
+ * @author manuteko
+ *
+ */
 @Component
 @ConfigurationProperties(prefix="app.security.aes")
 public class AESKeysProperties {
@@ -23,6 +28,7 @@ public class AESKeysProperties {
 	public static class TrustedChannel {
 		private String id;
 		private String key;
+		private String iv;
 		
 		public TrustedChannel() {
 			super();
@@ -40,6 +46,12 @@ public class AESKeysProperties {
 		public void setKey(String key) {
 			this.key = key;
 		}
+		public String getIv() {
+			return iv;
+		}
+		public void setIv(String iv) {
+			this.iv = iv;
+		}
 		
 		@Override
 		public String toString() {
@@ -48,6 +60,8 @@ public class AESKeysProperties {
 			builder.append(id);
 			builder.append(", key=");
 			builder.append(key);
+			builder.append(", iv=");
+			builder.append(iv);
 			builder.append("]");
 			return builder.toString();
 		}
